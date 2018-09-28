@@ -1,0 +1,72 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+.home-left
+{
+  background-color: darkcyan;
+}
+.home-right
+{
+  background-color: white;
+}
+.full-width {
+    height: 100%;
+}
+#left-ul ul
+{
+  padding: 15px;
+}
+#left-ul ul li
+{
+    font-size: 25px;
+    font-family: cursive;
+    color: white;darkcyan;
+}
+#right-ul ul li
+{
+    font-size: 25px;
+    font-family: cursive;
+    color: darkcyan;
+}
+.container ul li
+{
+    font-size: 15px;
+    font-family: cursive;
+    color: darkcyan;
+}
+.margin-col { margin:5px; }
+.margin-row { margin-bottom:0px; }
+.hepler-login {  min-height: 0px !important;  }
+.homemargin { margin-bottom: 0px !important; }
+
+.modal.modal-sm {  max-width: 450px;  top: 20% !important; }
+.modal .modal-header {
+  padding: 1px 24px;
+  background: darkcyan;
+}
+.modal .modal-header h5 {
+  font-family: cursive;
+  color: #ffffff;
+}
+.modal .modal-header h5 i {
+  margin-right: 3px;
+}
+.modal .modal-header h5 .modal-close {
+  font-family: cursive;
+  margin-right: 0;
+  position: absolute;
+  right: 10px;
+}
+/*media queries*/
+@media only screen and (max-width: 768px) {
+.modal {  width: 80% !important; max-height: 100%; overflow: visible }
+}
+@media only screen and (min-width: 768px)
+{
+  .modal{  width: 30% !important;  max-height: 100%; overflow: visible }
+}

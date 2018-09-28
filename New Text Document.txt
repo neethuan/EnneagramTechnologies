@@ -1,0 +1,3 @@
+client_id : 1027743188619-pjmnrtk3sul7hk404248r0g1c0tkvhc3.apps.googleusercontent.com
+
+cient_secret : oz_JeICn6-MazWB5gCyTNb7f

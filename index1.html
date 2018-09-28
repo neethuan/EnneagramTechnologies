@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="1027743188619-pjmnrtk3sul7hk404248r0g1c0tkvhc3.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js?onload=onLoadGoogleCallback" async defer></script>
+  <title>EnneagramTechnologies</title>
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link rel="stylesheet" href="css/materialize-social.css">
+
+</head>
+<body>
+<script type="text/javascript">
+  function onLoadGoogleCallback(){
+  gapi.load('auth2', function() {
+    auth2 = gapi.auth2.init({
+      client_id: '1027743188619-pjmnrtk3sul7hk404248r0g1c0tkvhc3.apps.googleusercontent.com',
+      cookiepolicy: 'single_host_origin',
+      scope: 'profile'
+    });
+
+  auth2.attachClickHandler(element, {},
+    function(googleUser) {
+        console.log('Signed in: ' + googleUser.getBasicProfile().getName());
+      }, function(error) {
+        console.log('Sign-in error', error);
+      }
+    );
+  });
+
+  element = document.getElementById('googleSignIn');
+}
+</script>
+
+  <!-------Starts script for facebook login------- -->
+  <script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response,ck) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    if (response.status === 'connected') {
+      if(ck=="clicke")
+      {
+        testAPI();
+      }
+    } else {
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    }
+  }
+
+
+  function checkLoginState() {
+    $('.modal').modal({
+      dismissible: false
+      });
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response,"clicke");
+    });
+  }
+
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '505051713243239',
+      cookie     : true,  // enable cookies to allow the server to access 
+                          // the session
+      xfbml      : true,  // parse social plugins on this page
+      version    : 'v2.8' // use graph api version 2.8
+    });
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+  function testAPI() {
+    var evtype=$('#evtype').val();
+    FB.api('/me', {fields: 'name,email,id'},function(response) {
+      var request = $.ajax({
+        url: "login.php",
+        method: "POST",
+        data: { 
+                email : response.email,
+                name : response.name,
+                userID : response.id,
+                evtype : evtype
+              },
+        dataType: "text",
+        success:function(data)
+        {
+         if(data==1)
+          {
+               $('#modal1as').modal('open');
+          }
+          else if(data==0)
+          {
+              $('#modal1already').modal('open');
+          }
+           else if(data==3)
+          {
+               $('#alertmsg').text("Invalid credentials");
+               $('#modal1already').modal('open');
+          }
+          else if(data==4)
+          {
+            $('#alertmsg').text("You are not registerd on the system.Pease signup");
+            $('#modal1already').modal('open');
+          }
+          else if(data==5)
+          {
+             $('#susmsg').text("Login Successful");
+            $('#modal1as').modal('open');
+          }
+          
+        },
+        error:function()
+        {
+          alert("Error in Sign up");
+        }
+      });
+      console.log('Successful login for: ' + response.name);
+    });
+  }
+</script>
+<!-------Ends script for facebook login------- -->
+
+
+     <div class="row homemargin">
+        <div class="col s6 home-left valign-wrapper">
+              <div class="container" id="left-ul">
+               <ul class="">
+                  <li>What is Lorem Ipsum?</li>
+                  <li>Why do we use it?</li>
+                  <li>Where can I get some?</li>
+               </ul>
+              </div>
+        </div>
+         <div class="col s6 valign-wrapper home-right ">
+              <div class="container" id="right-ul">
+               <ul >
+                  <li>SIMPLIFYING SELF DISCOVERY</li>
+                  <li>Join with us</li>
+                  <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1" id="ev-signup">Sign Up</a></li>
+				  <li><a class="waves-effect waves-light btn modal-trigger" href="#modal-login" id="ev-login">Log in</a></i></button></li>
+          <input type="hidden" name="evtype" id="evtype">
+               </ul>
+              </div>
+        </div>
+      </div>
+	  
+	    <!-- Starts Modal Structure for sign up-->
+      <div id="modal1" class="modal">
+          <div class="modal-header ">
+          <h5> <i class="ion-alert"></i>Sign up here</h5>
+        </div>
+        <div class="modal-content">    		
+    		  <div class="row">
+            <form class="col s12" method="POST" action="login.php" onsubmit="return loginSocialForm()">
+              <div class="row">
+                  <div class="input-field col s12">
+                      <input id="email" type="email" class="validate" required="Please enter our email" name="email">
+                      <label for="email">Email</label>
+                      <span class="helper-text hepler-login" data-error="wrong" data-success="right"></span>
+                    </div>
+                    <div class="input-field col s12">
+                      <input id="password" type="password" class="validate" required name="password">
+                      <label for="password">Password</label>
+                    </div> 
+                    <div class="input-field col s12">
+                      <input id="cpassword" type="password" class="validate" required name="cpassword">
+                      <label for="cpassword">Confirm Password</label>
+                    </div> 
+                  <div class="input-field col s12 right-align">
+                      <button class="btn waves-effect waves-light" type="submit" name="action" >Submit
+                      <i class="material-icons right">send</i>
+                     </button>
+                  </div>
+                  <div class="col s12" class="valign-wrapper">
+                    <h5>OR</h5>
+                  </div>
+                  <div class="col s6" class="valign-wrapper">
+                    <a class="waves-effect waves-light btn social facebook" onclick="checkLoginState();">
+                      <i class="fa fa-facebook"></i> Sign in with facebook
+                    </a>
+                  </div>
+                  <div class="col s6" class="valign-wrapper" >
+                    <a class="waves-effect waves-light btn social google" id="googleSignIn" data-onsuccess="onSignIn" >
+                      <i class="fa fa-google"></i> Sign in with google
+                    </a>
+                  </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+    		<a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+      </div>
+     <!-- Ends Modal Structure for sign up-->
+
+     <!-- Starts Modal Structure for Login-->
+      <div id="modal-login" class="modal">
+          <div class="modal-header ">
+          <h5> <i class="ion-alert"></i>Login</h5>
+        </div>
+        <div class="modal-content">       
+          <div class="row">
+            <form class="col s12" method="POST" onsubmit="loginSocialForm(); return false;">
+              <div class="row">
+                  <div class="input-field col s12">
+                      <input id="log-email" type="email" class="validate" required="Please enter our email" name="email">
+                      <label for="email">Email</label>
+                      <span class="helper-text hepler-login" data-error="wrong" data-success="right"></span>
+                    </div>
+                    <div class="input-field col s12">
+                      <input id="log-password" type="password" class="validate" required name="password">
+                      <label for="password">Password</label>
+                    </div> 
+                  <div class="input-field col s12 right-align">
+                      <button class="btn waves-effect waves-light" type="submit" name="action" onclick="loginForm();">Log In
+                      <i class="material-icons right">send</i>
+                     </button>
+                  </div>
+                  <div class="col s12" class="valign-wrapper">
+                    <h5>OR</h5>
+                  </div>
+                  <div class="col s2" class="valign-wrapper">
+                    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">Login</fb:login-button>
+                  </div>
+                  <div class="col s2" class="valign-wrapper">
+                    <!-- <div class="g-signin2" onclick="ClickLogin()" data-onsuccess="onSignIn" data-theme="dark"></div> -->
+                  </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+      </div>
+     <!-- Ends Modal Structure for Login-->
+ 
+ 
+      <!-- Starts Modal for success-->
+      <div id="modal1as" class="modal  modal-sm modalas" style="width:27% !important">
+        <div class="modal-header ">
+          <h5> <i class="ion-alert"></i>Congratulations !</h5>
+        </div>
+        <div class="modal-content">
+          <h6 style="color: green;" id="susmsg">You have successfully registered!!</h6>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Ok</a>
+        </div>
+      </div>
+     <!-- Ends Modal for success-->
+
+     <!-- Starts Modal for Already exists-->
+      <div id="modal1already" class="modal modal-sm modalas" >
+        <div class="modal-header ">
+          <h5> <i class="ion-alert"></i> Alert</h5>
+        </div>
+        <div class="modal-content">
+          <h5 style="color: green;" id="alertmsg">Already registerd</h5>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Ok</a>
+        </div>
+      </div>
+     <!-- Ends Modal for Already exists-->
+
+ <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+  </body>
+  
+  
+<script>
+$(document).ready(function() {
+  var st = GetQueryStringParams('st');
+  window_size = $(window).height();
+  $('.home-left,.home-right').height(window_size);
+  $('.modal').modal();
+  $('#modal1as').modal();
+  if(st==1)
+  {
+     $('#modal1as').modal('open');
+  }
+  else if(st==0)
+  {
+    $('#modal1already').modal('open');
+  }
+
+$('#ev-signup').click(function(){
+    $('#evtype').val('signup');
+    console.log("signup");
+});
+$('#ev-login').click(function(){
+    $('#evtype').val('login');
+     console.log("login");
+});
+
+});
+    
+
+
+    var clicked=false;//Global Variable
+    function ClickLogin()
+    {
+        clicked=true;
+    }
+    function onSignIn(googleUser) {
+		if (clicked) {
+			$('.modal').modal({
+				dismissible: false
+                });
+                var profile = googleUser.getBasicProfile();
+                var lemail=profile.getEmail();
+                var lname=profile.getName();
+                var lid=profile.getId();
+				loginSocial(lemail,lname,lid);
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+    }
+      };
+
+      function loginSocial(lemail,lname,lid)
+      {
+        var evtype=$('#evtype').val();
+        $.ajax({
+        url: "login.php",
+        method: "POST",
+        data: { 
+                email : lemail,
+                name : lname,
+                userID : lid,
+                evtype : evtype,
+              },
+        dataType: "text",
+        success:function(data)
+        {
+         if(data==1)
+          {
+               $('#modal1as').modal('open');
+          }
+          else if(data==0)
+          {
+            $('#modal1already').modal('open');
+          } 
+          else if(data==3)
+          {
+               $('#alertmsg').text("Invalid credentials");
+               $('#modal1already').modal('open');
+          }
+          else if(data==4)
+          {
+            $('#alertmsg').text("You are not registerd on the system.Pease signup");
+            $('#modal1already').modal('open');
+          }
+          else if(data==5)
+          {
+             $('#susmsg').text("Login Successful");
+            $('#modal1as').modal('open');
+          }
+        },
+        error:function()
+        {
+          alert("Error in Sign up");
+        }
+      });
+      }
+      function loginSocialForm()
+      {
+        var lemail=$('#email').val();
+        var password=$('#password').val();
+        var cpassword=$('#cpassword').val();
+        if(password!=cpassword)
+          {
+            alert("password and confirm password is not matching");
+            $('#password').val('');
+            $('#cpassword').val('');
+            return false;
+          }
+      }
+
+       function loginForm()
+      {
+        var log_mail=$('#log-email').val();
+        var log_password=$('#log-password').val();
+        var evtype=$('#evtype').val();
+        $.ajax({
+        url: "login.php",
+        method: "POST",
+        data: { 
+                email : log_mail,
+                password : log_password,
+                evtype : evtype
+              },
+        dataType: "text",
+        success:function(data)
+        {
+         if(data==3)
+          {
+               $('#alertmsg').text("Invalid credentials");
+               $('#modal1already').modal('open');
+          }
+          else if(data==4)
+          {
+            $('#alertmsg').text("You are not registerd on the system.Pease signup");
+            $('#modal1already').modal('open');
+          }
+          else if(data==5)
+          {
+             $('#susmsg').text("Login Successful");
+            $('#modal1as').modal('open');
+          }
+        },
+        error:function()
+        {
+          alert("Error in Sign up");
+        }
+      });
+      }
+        
+
+           function GetQueryStringParams(sParam)
+          {   
+            var sPageURL = window.location.search.substring(1);
+            var sURLVariables = sPageURL.split('&');
+            for (var i = 0; i < sURLVariables.length; i++)
+            {
+                var sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] == sParam)
+                {
+                    return sParameterName[1];
+                }
+            }
+        }
+
+</script>
+</html>
